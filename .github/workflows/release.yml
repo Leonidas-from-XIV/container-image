@@ -18,11 +18,9 @@ jobs:
             name: aarch64-macos
           - os: ubuntu-latest
             name: x86_64-linux
-          - os: ubuntu-latest
-            name: x86_64-linux-statically-linked
     steps:
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: ocaml-dune/setup-dune@v0
 
@@ -35,10 +33,6 @@ jobs:
             ~/.cache/dune
           key: ${{ matrix.os }}-artifacts-${{ hashFiles('dune.lock') }}
 
-      - name: Configure Dune to use the "static" profile
-        if: matrix.name == 'x86_64-linux-statically-linked'
-        run: echo DUNE_PROFILE=static >> $GITHUB_ENV
-
       - name: Build the project
         run: dune build @install --only-packages container-image
 
@@ -49,6 +43,34 @@ jobs:
           mkdir -p "$OUT_NAME"
           cp -rlf _build/install/default/* "$OUT_NAME"
           tar czf "$OUT_NAME.tar.gz" "$OUT_NAME"
+
+      - name: Upload assets
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: "*.tar.gz"
+
+
+  release-x86_64-linux-musl-static:
+    name: Build for x86_64-linux-musl-static
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v6
+
+      - run: echo OUT_NAME=container-image-${{ github.ref_name }}-x86_64-linux-statically-linked >> $GITHUB_ENV
+
+      - run: mkdir -p $OUT_NAME
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - run: docker buildx build --output type=local,dest=$OUT_NAME -f scripts/build-alice-x86_64-linux-musl-static.dockerfile .
+
+      - name: Test we can execute the exe on the host as a basic sanity check
+        run: $OUT_NAME/bin/container-image --help
+
+      - name: Make a tarball of build outputs
+        run: tar czf "$OUT_NAME.tar.gz" "$OUT_NAME"
 
       - name: Upload assets
         uses: ncipollo/release-action@v1
