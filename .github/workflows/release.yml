@@ -22,7 +22,7 @@ jobs:
 
       - uses: actions/checkout@v6
 
-      - uses: ocaml-dune/setup-dune@v0
+      - uses: ocaml-dune/setup-dune@v2
 
       - name: Load dependencies from the cache
         id: artifact-cache
@@ -34,15 +34,15 @@ jobs:
           key: ${{ matrix.os }}-artifacts-${{ hashFiles('dune.lock') }}
 
       - name: Build the project
-        run: dune build @install --only-packages container-image
+        run: dune build @install --only-packages container-image --release
 
-      - run: echo OUT_NAME=container-image-${{ github.ref_name }}-${{ matrix.name }} >> $GITHUB_ENV
 
       - name: Release a tarball of build outputs
         run: |
-          mkdir -p "$OUT_NAME"
-          cp -rlf _build/install/default/* "$OUT_NAME"
-          tar czf "$OUT_NAME.tar.gz" "$OUT_NAME"
+          OUT_NAME="container-image-${{ github.ref_name }}-${{ matrix.name }}"
+          mkdir -p "${OUT_NAME}"
+          cp -rlf _build/install/default/* "${OUT_NAME}"
+          tar czf "${OUT_NAME}.tar.gz" "${OUT_NAME}"
 
       - name: Upload assets
         uses: ncipollo/release-action@v1
@@ -63,7 +63,7 @@ jobs:
       - run: mkdir -p $OUT_NAME
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
       - run: docker buildx build --output type=local,dest=$OUT_NAME -f scripts/build-static.dockerfile .
 
       - name: Test we can execute the exe on the host as a basic sanity check
