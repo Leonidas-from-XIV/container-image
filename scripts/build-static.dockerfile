@@ -1,4 +1,4 @@
-FROM alpine:3.22.0 AS builder
+FROM alpine:3.23 AS builder
 
 RUN apk update && apk add \
     build-base \
@@ -13,7 +13,7 @@ RUN apk update && apk add \
     ;
 
 # Install Dune
-RUN curl -4fsSL https://github.com/ocaml-dune/dune-bin-install/releases/download/v3/install.sh | sh -s 3.20.2 --install-root /usr --no-update-shell-config
+RUN curl -fsSL https://get.dune.build/install | sh -s - --release latest
 
 RUN mkdir /app
 WORKDIR /app
@@ -23,9 +23,9 @@ COPY --chmod=0755 dune.lock dune.lock
 COPY --chmod=0755 dune-project container-image.opam .
 ENV DUNE_PROFILE=static
 
-RUN dune build @install --only-packages container-image --display=short
 RUN mkdir /out
-RUN dune install --prefix=/out container-image
+RUN PATH=$HOME/.local/bin:$PATH dune build @install --only-packages container-image --release --display=short
+RUN PATH=$HOME/.local/bin:$PATH dune install --prefix=/out container-image
 
 FROM scratch
 COPY --from=builder /out .
