@@ -66,7 +66,6 @@ jobs:
 
       - name: Test we can execute the exe on the host as a basic sanity check
         run: |
-          tree $OUT_NAME
           file $OUT_NAME/bin/image
           ldd $OUT_NAME/bin/image
           $OUT_NAME/bin/image --help
