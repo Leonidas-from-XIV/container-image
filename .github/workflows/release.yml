@@ -1,9 +1,8 @@
-name: release
+name: Build and upload binary releases
 
 on:
-  push:
-    tags:
-    - '*'
+  release:
+    types: [released]
 
 jobs:
   release-unix:
@@ -35,7 +34,6 @@ jobs:
 
       - name: Build the project
         run: dune build @install --only-packages container-image --release
-
 
       - name: Release a tarball of build outputs
         run: |
