@@ -29,4 +29,3 @@ RUN PATH=$HOME/.local/bin:$PATH dune install --prefix=/out container-image
 
 FROM scratch
 COPY --from=builder /out .
-RUN /out/bin/image --help
