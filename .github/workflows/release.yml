@@ -64,6 +64,11 @@ jobs:
         uses: docker/setup-buildx-action@v4
       - run: docker buildx build --output type=local,dest=$OUT_NAME -f scripts/build-static.dockerfile .
 
+      - uses: actions/upload-artifact@v7
+        with:
+          path: $OUT_NAME
+          name: release-x86_64-linux-musl-static
+
       - name: Test we can execute the exe on the host as a basic sanity check
         run: |
           file $OUT_NAME/bin/image
