@@ -25,7 +25,7 @@ jobs:
 
       - name: Load dependencies from the cache
         id: artifact-cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             _build
@@ -65,7 +65,9 @@ jobs:
       - run: docker buildx build --output type=local,dest=$OUT_NAME -f scripts/build-static.dockerfile .
 
       - name: Test we can execute the exe on the host as a basic sanity check
-        run: $OUT_NAME/bin/image --help
+        run: |
+          tree $OUT_NAME
+          $OUT_NAME/bin/image --version
 
       - name: Make a tarball of build outputs
         run: tar czf "$OUT_NAME.tar.gz" "$OUT_NAME"
