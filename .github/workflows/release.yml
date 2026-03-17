@@ -68,7 +68,7 @@ jobs:
         run: |
           file $OUT_NAME/bin/image
           ldd $OUT_NAME/bin/image
-          $OUT_NAME/bin/image --help
+          $OUT_NAME/bin/image
 
       - name: Make a tarball of build outputs
         run: tar czf "$OUT_NAME.tar.gz" "$OUT_NAME"
