@@ -66,7 +66,7 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          path: $OUT_NAME
+          path: ${{ env.OUT_NAME }}
           name: release-x86_64-linux-musl-static
 
       - name: Test we can execute the exe on the host as a basic sanity check
