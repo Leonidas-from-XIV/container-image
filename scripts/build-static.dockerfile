@@ -24,7 +24,7 @@ COPY --chmod=0755 dune-project container-image.opam .
 ENV DUNE_PROFILE=static
 
 RUN mkdir /out
-RUN PATH=$HOME/.local/bin:$PATH dune build @install --only-packages container-image --release --display=short
+RUN PATH=$HOME/.local/bin:$PATH dune build @install --only-packages container-image --display=short
 RUN PATH=$HOME/.local/bin:$PATH dune install --prefix=/out container-image
 
 FROM scratch
