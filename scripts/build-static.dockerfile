@@ -1,3 +1,5 @@
+# need to use alpine 3.22 as 3.23 breaks static binaries by enabling PIE
+# https://discuss.ocaml.org/t/segfaults-on-static-compilation-with-alpine-3-23-fix-no-pie/17800
 FROM alpine:3.22 AS builder
 
 RUN apk update && apk add \
