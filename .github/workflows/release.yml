@@ -50,7 +50,7 @@ jobs:
 
 
   release-x86_64-linux-musl-static:
-    name: Build for x86_64-linux-musl-static
+    name: Release for x86_64-linux-musl-static
     runs-on: ubuntu-latest
     steps:
 
@@ -71,8 +71,14 @@ jobs:
 
       - name: Test we can execute the exe on the host as a basic sanity check
         run: |
+          # make sure the executable is static
           file $OUT_NAME/bin/image
-          ldd $OUT_NAME/bin/image
+          # make sure it doesn't link with anything
+          if ldd $OUT_NAME/bin/image; then
+            # if ldd exists with 0 it means it links to dynamic libraries
+            exit 1
+          fi
+          # call the executable
           $OUT_NAME/bin/image
 
       - name: Make a tarball of build outputs
