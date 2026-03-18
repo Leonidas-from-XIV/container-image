@@ -1,4 +1,4 @@
-FROM alpine:3.23 AS builder
+FROM alpine:3.22 AS builder
 
 RUN apk update && apk add \
     build-base \
@@ -13,7 +13,7 @@ RUN apk update && apk add \
     ;
 
 # Install Dune
-RUN curl -fsSL https://get.dune.build/install | sh -s - --release latest
+RUN curl -fsSL https://get.dune.build/install | sh
 ENV DUNE_PROFILE=static
 
 RUN mkdir /app
@@ -29,3 +29,4 @@ RUN PATH=$HOME/.local/bin:$PATH dune install --prefix=/out container-image
 
 FROM scratch
 COPY --from=builder /out .
+COPY --from=builder /app/_build/trace.csexp .
