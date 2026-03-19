@@ -40,7 +40,7 @@ jobs:
           OUT_NAME="container-image-${{ github.ref_name }}-${{ matrix.name }}"
           mkdir -p "${OUT_NAME}"
           cp -rlf _build/install/default/* "${OUT_NAME}"
-          tar --format=posix cf "${OUT_NAME}.tar" "${OUT_NAME}"
+          tar --format=posix -cf "${OUT_NAME}.tar" "${OUT_NAME}"
           gzip -9 "${OUT_NAME}.tar"
 
       - name: Upload assets
@@ -84,7 +84,7 @@ jobs:
 
       - name: Make a tarball of build outputs
         run: |
-          tar --format=posix cf "$OUT_NAME.tar" "$OUT_NAME"
+          tar --format=posix -cf "$OUT_NAME.tar" "$OUT_NAME"
           gzig -9 "${OUT_NAME}.tar"
 
       - name: Upload assets
