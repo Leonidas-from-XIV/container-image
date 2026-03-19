@@ -33,6 +33,11 @@ cd container-image
 dune build @install --pkg enabled
 ```
 
+For information on how to develop with Dune package management alongside Opam,
+please refer to the [How to Use Opam Alongside Dune Package
+Management](https://dune.readthedocs.io/en/stable/howto/use-opam-alongside-dune-package-management.html)
+documentation in Dune.
+
 ### Using OPAM (When available)
 
 ```bash
