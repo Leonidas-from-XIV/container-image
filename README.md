@@ -85,11 +85,11 @@ upon release. Currently supported platforms are:
   * Linux on AMD64
 
 To create the binaries create a GitHub release (either manually or via helper
-tools like `dune-release`). This will which will trigger a GitHub Action which
-will check out the revision linked with the release, build it on the specified
-platform and upload the binaries to the GitHub release automatically. This
-process takes a few minutes, depending on how fast the GitHub runners are and
-can be tracked in the "Actions" tab of the project.
+tools like `dune-release`). This will trigger a GitHub Action which will check
+out the revision linked with the release, build it on the specified platform
+and upload the binaries to the GitHub release automatically. This process takes
+a few minutes, depending on how fast the GitHub runners are and can be tracked
+in the "Actions" tab of the project.
 
 ### Updating the dependency versions
 
