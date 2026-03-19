@@ -40,7 +40,8 @@ jobs:
           OUT_NAME="container-image-${{ github.ref_name }}-${{ matrix.name }}"
           mkdir -p "${OUT_NAME}"
           cp -rlf _build/install/default/* "${OUT_NAME}"
-          tar czf "${OUT_NAME}.tar.gz" "${OUT_NAME}"
+          tar --format=posix cf "${OUT_NAME}.tar" "${OUT_NAME}"
+          gzip -9 "${OUT_NAME}.tar"
 
       - name: Upload assets
         uses: ncipollo/release-action@v1
@@ -82,7 +83,9 @@ jobs:
           $OUT_NAME/bin/image
 
       - name: Make a tarball of build outputs
-        run: tar czf "$OUT_NAME.tar.gz" "$OUT_NAME"
+        run: |
+          tar --format=posix cf "$OUT_NAME.tar" "$OUT_NAME"
+          gzig -9 "${OUT_NAME}.tar"
 
       - name: Upload assets
         uses: ncipollo/release-action@v1
